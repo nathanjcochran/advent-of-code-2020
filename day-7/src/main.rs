@@ -36,6 +36,7 @@ fn main() {
         .collect();
 
     problem1(&rules);
+    problem2(&rules);
 }
 
 fn problem1(rules: &Vec<(&str, Vec<Bag>)>) {
@@ -80,4 +81,31 @@ fn problem1(rules: &Vec<(&str, Vec<Bag>)>) {
     }
 
     println!("Bag colors: {}", count);
+}
+
+fn problem2(rules: &Vec<(&str, Vec<Bag>)>) {
+    println!("Problem 2");
+
+    let mut graph = HashMap::<&str, &Vec<Bag>>::new();
+    for rule in rules {
+        graph.insert(&rule.0, &rule.1);
+    }
+
+    let count = contained_bags("shiny gold", &graph);
+
+    println!("Bags: {}", count);
+}
+
+// Recursive helper function
+fn contained_bags(color: &str, graph: &HashMap<&str, &Vec<Bag>>) -> u32 {
+    match graph.get(color) {
+        Some(bags) => {
+            let mut count = 0;
+            for bag in bags.iter() {
+                count += bag.count + (bag.count * contained_bags(bag.color.as_str(), graph));
+            }
+            count
+        }
+        _ => 0,
+    }
 }
