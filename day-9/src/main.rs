@@ -8,10 +8,11 @@ fn main() {
         .map(|i| i.parse::<i64>().expect("Invalid integer"))
         .collect();
 
-    problem1(&numbers);
+    let answer = problem1(&numbers);
+    problem2(&numbers, answer);
 }
 
-fn problem1(numbers: &Vec<i64>) {
+fn problem1(numbers: &Vec<i64>) -> i64 {
     println!("Problem 1");
 
     let mut map = HashMap::<i64, Vec<(usize, usize)>>::new();
@@ -33,7 +34,40 @@ fn problem1(numbers: &Vec<i64>) {
         }
         if !found {
             println!("Answer: {}", num);
+            return *num;
+        }
+    }
+    panic!("Answer not found");
+}
+
+fn problem2(numbers: &Vec<i64>, target: i64) {
+    println!("Problem 2");
+
+    let mut lower = 0;
+    let mut upper = 1;
+    let mut sum = numbers[lower] + numbers[upper];
+    loop {
+        if sum < target {
+            upper += 1;
+            sum += numbers[upper];
+        } else if sum > target {
+            sum -= numbers[lower];
+            lower += 1;
+        } else {
             break;
         }
     }
+
+    let mut min = numbers[lower];
+    let mut max = numbers[lower];
+    for num in numbers[lower..upper + 1].iter() {
+        if *num < min {
+            min = *num
+        }
+        if *num > max {
+            max = *num
+        }
+    }
+
+    println!("Answer: {}", min + max);
 }
