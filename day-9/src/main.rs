@@ -18,6 +18,9 @@ fn problem1(numbers: &Vec<i64>) -> i64 {
     let mut map = HashMap::<i64, Vec<(usize, usize)>>::new();
     for (i, iv) in numbers.iter().enumerate() {
         for (j, jv) in numbers.iter().enumerate() {
+            if j >= i + 25 {
+                break;
+            }
             map.entry(iv + jv).or_insert(Vec::new()).push((i, j));
         }
     }
